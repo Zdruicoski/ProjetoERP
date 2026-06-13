@@ -6,9 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.xpto.ProjetoERP.Entity.Produto;
-import com.xpto.ProjetoERP.dto.ProdutoDTO;
 import com.xpto.ProjetoERP.dto.PedidoMovimentacaoDTO;
-
+import com.xpto.ProjetoERP.dto.ProdutoDTO;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -39,34 +38,55 @@ public class ProdutoService {
         return true;
     }
 
-    /**Verifica o sku passado.
-     * @return Retorna true se encontrar e false se não encontrar */
-    public static boolean verificarSku(String sku){ //Vai pra um utilitário de teste
+    public static boolean verificarDebitar(PedidoMovimentacaoDTO dto){
+        if(verificarSku(dto)){
+            System.out.println("Sku Existe");
+        }else {
+            return false;
+        }
+        if(verificarDisponibilidade(dto)){
+            System.out.println("Tem estoque");
+        }else{
+            return false;
+        }
+        return true;
+    }
+
+    //Vai para o utilitarios
+
+        public static Produto buscarProduto(PedidoMovimentacaoDTO dto) {
+    for (Produto produto : lista) {
+        if (produto.infos().getSku().equals(dto.getSkuProduto())) {
+            return produto; 
+        }
+    }
+
+        return null;
+    }
+
+    public static boolean verificarDisponibilidade(PedidoMovimentacaoDTO dto) {
         for (Produto produto : lista) {
-            if(produto.infos().getSku().equals(sku)){
+            if (produto.infos().getSku().equals(dto.getSkuProduto())) {
+                if (produto.infos().getQuantidadeEstoque() >= dto.getQuantidade()) {
+                    return true;
+                }
+                return false; // Se achou o SKU mas não tem estoque, já retorna false direto
+            }
+    }
+    return false; // Se rodou a lista inteira e não achou o SKU, retorna false
+
+    
+}
+        /**Verifica o sku passado.
+     * @return Retorna true se encontrar e false se não encontrar */
+    public static boolean verificarSku(PedidoMovimentacaoDTO dto){ //Vai pra um utilitário de teste
+        for (Produto produto : lista) {
+            if(produto.infos().getSku().equals(dto.getSkuProduto())){
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean verificarDebitar(PedidoMovimentacaoDTO dto){
-        if(verificarSku(dto.getSkuProduto())){
-            for (Produto produto : lista) {
-                if(produto.infos().getQuantidadeEstoque() == dto.getQuantidade()){
-                    return true;
-                }
-            }
-        }else {
-            return false;
-        }
-    }
-
-
-
-    public static boolean verificarDisponibilidade(float qtd){ //Vai pra um utilitário depois
-
-
-    }
 
 }
