@@ -39,22 +39,8 @@ public class ProdutoService {
         return true;
     }
 
-    public boolean VerificarDebitar(PedidoMovimentacaoDTO dto){
-        if (verificarSku(dto.getSkuProduto())){
-
-            if(quantidadeEstoque < qtd){
-                System.err.println("Estoque insuficiente"); //Passar esse teste para o service -> diexar um static final nos movimentações e só puxar um utilitário de teste, que idnica com base nesse código o teste certo.
-                return false;
-            } else{
-                quantidadeEstoque = quantidadeEstoque - qtd; //Produto faz só isso
-                
-                return true;
-            }
-        }
-    }
-
-    /**Verifica o sku passado. 
-     * @return Retorna true se encontrar e false se não encontrar */  
+    /**Verifica o sku passado.
+     * @return Retorna true se encontrar e false se não encontrar */
     public static boolean verificarSku(String sku){ //Vai pra um utilitário de teste
         for (Produto produto : lista) {
             if(produto.infos().getSku().equals(sku)){
@@ -62,6 +48,25 @@ public class ProdutoService {
             }
         }
         return false;
+    }
+
+    public static boolean verificarDebitar(PedidoMovimentacaoDTO dto){
+        if(verificarSku(dto.getSkuProduto())){
+            for (Produto produto : lista) {
+                if(produto.infos().getQuantidadeEstoque() == dto.getQuantidade()){
+                    return true;
+                }
+            }
+        }else {
+            return false;
+        }
+    }
+
+
+
+    public static boolean verificarDisponibilidade(float qtd){ //Vai pra um utilitário depois
+
+
     }
 
 }

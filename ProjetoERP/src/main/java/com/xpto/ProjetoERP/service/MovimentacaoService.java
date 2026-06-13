@@ -1,5 +1,7 @@
 package com.xpto.ProjetoERP.service;
 
+import com.xpto.ProjetoERP.Entity.Produto;
+import com.xpto.ProjetoERP.dto.PedidoMovimentacaoDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -13,19 +15,15 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import com.xpto.ProjetoERP.dto.PedidoMovimentacaoDTO;
 import com.xpto.ProjetoERP.dto.MovimentacaoDTO;
 
+import java.util.List;
+
 
 @Service
 public class MovimentacaoService {
-    
 
-    public List<ProdutoDTO> listar(){
-        return service.listar();
-    }
-
-    public boolean debitar(@RequestBody PedidoMovimentacaoDTO dto){
-        if (ProdutoService.VerificarDebitar(dto)){ 
-
-            Movimentacao baixa = new MovimentacaoBaixa(dto);
+    public boolean debitar(@RequestBody PedidoMovimentacaoDTO dto, Produto produto){
+        if (ProdutoService.verificarDebitar(dto)){
+            MovimentacaoBaixa baixa = new MovimentacaoBaixa(dto, produto);
 
         };
         
