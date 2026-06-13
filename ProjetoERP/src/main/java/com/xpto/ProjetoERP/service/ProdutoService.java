@@ -39,17 +39,11 @@ public class ProdutoService {
         return true;
     }
 
-    public boolean VerificarDebitar(PedidoMovimentacaoDTO dto){
-        if (verificarSku(dto.getSkuProduto())){
-
-            if(quantidadeEstoque < qtd){
-                System.err.println("Estoque insuficiente"); //Passar esse teste para o service -> diexar um static final nos movimentações e só puxar um utilitário de teste, que idnica com base nesse código o teste certo.
-                return false;
-            } else{
-                quantidadeEstoque = quantidadeEstoque - qtd; //Produto faz só isso
-                
-                return true;
-            }
+    public static boolean verificarDebitar(PedidoMovimentacaoDTO dto){
+        if(verificarDebitar(dto)){
+            return true;
+        }else {
+            return false;
         }
     }
 
